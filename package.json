@@ -1,0 +1,22 @@
+{
+  "name": "testleaf_playwright",
+  "version": "1.0.0",
+  "description": "",
+  "main": "DataType.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajeshbtech009/PlayWrightPractice_RajeshRajendran.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajeshbtech009/PlayWrightPractice_RajeshRajendran/issues"
+  },
+  "homepage": "https://github.com/rajeshbtech009/PlayWrightPractice_RajeshRajendran#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^24.10.2"
+  }
+}
