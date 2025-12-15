@@ -3,7 +3,12 @@ import { TIMEOUT } from "dns"
 
 type supportedBrowsers = "Edge"|"Chrome"|"Firefox"|"Safari"
 
-test("Marathon",async({page})=>{
+test("Marathon",async({context,page})=>{
+await context.grantPermissions(['notifications'], {
+    origin: 'https://salesforce.com/',
+  });
+
+    
     await page.goto("https://login.salesforce.com/")
     await page.getByRole("textbox",{name:"Username"}).fill("dilipkumar.rajendran@testleaf.com")
     await page.getByRole("textbox",{name:"Password"}).fill("TestLeaf@2025")
@@ -11,7 +16,7 @@ test("Marathon",async({page})=>{
 
 
     //Verify whether login to salesforce CRM
-    await expect(page).toHaveURL("https://testleaf.lightning.force.com/lightning/page/home", {timeout:10000});
+    await expect(page).toHaveURL("https://testleaf.lightning.force.com/lightning/page/home", {timeout:28000});
     await expect(page).toHaveTitle("Home | Salesforce");
 
     //app launcher
@@ -46,30 +51,29 @@ test("Marathon",async({page})=>{
     //Click on the New button to create a new case.
     await page.locator("//a/div[text()='New']").click()
     //A form to input details for the new case should appear
-    await expect(page.locator('//div[@class="actionBody"]')).toBeVisible({timeout:12000})
+    await expect(page.locator('//div[@class="actionBody"]')).toBeVisible({timeout:18000})
 
     //Click on the Search Contacts input field in Contact Name
     await page.getByPlaceholder('Search Contacts...').click()
     //A list menu with New Contact link should be displayed.
     // Click on the New Contact link\
-    await page.getByPlaceholder('Search Contacts...').fill("new")
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Enter');
+    const listoptions = page.getByPlaceholder('Search Contacts...')
+    await expect(listoptions).toBeVisible();
+    await expect(listoptions).toBeEnabled();
+    await listoptions.fill("new")
+    //await page.waitForTimeout(38000);
+    await page.locator("(//div[@part='dropdown overlay']/lightning-base-combobox-item)[2]").click();
+    
 
     //Fill in all the mandatory fields (Salutation, First Name, Last Name) with a valid data.
     await page.getByRole("combobox",{name:"Salutation"}).click()
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Enter');
+    await page.locator("(//div/lightning-base-combobox-item)[2]").click()
+    await page.locator('//input[@name="firstName"]').fill("Rajesh")
+    await page.locator('//input[@name="lastname"]').fill("Rajendran")
 
-    await page.getByRole("textbox",{name:"First Name"}).fill("Rajesh")
-    await page.getByRole("textbox",{name:"Last Name"}).fill("Rajendran")
-    await page.getByRole("combobox",{name:"Account Name"}).click()
-
-    await page.keyboard.press("ArrowDown")
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Enter');
+    await page.getByPlaceholder("Search Accounts...").click();
+    await page.locator("(//ul[@aria-label='Recent Accounts']/li)[2]").click();
+    
 
     await page.getByRole("button",{name:"Save"}).click()
 
